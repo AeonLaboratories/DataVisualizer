@@ -95,9 +95,13 @@ namespace Data_Visualizer
 
 			MouseWheel += new MouseEventHandler(Form1_MouseWheel);
 
-			StreamReader fin = new StreamReader(iniFileName);
-			dataFileName = fin.ReadLine();
-			fin.Close();
+			try
+			{
+				StreamReader fin = new StreamReader(iniFileName);
+				dataFileName = fin.ReadLine();
+				fin.Close();
+			}
+			catch { }
 			fileChanged();
 		}
 
@@ -118,7 +122,7 @@ namespace Data_Visualizer
 
 		void fileChanged()
 		{
-			this.Text = dataFileName;
+			this.Text = dataFileName ?? "Data Visualizer";
 
 			penColorPanel.Controls.Clear();
 
@@ -206,6 +210,9 @@ namespace Data_Visualizer
 
 		void readData()
 		{
+			if (String.IsNullOrEmpty(dataFileName))
+				return;
+
 			StreamReader fin;
 			try { fin = new StreamReader(dataFileName); }
 			catch
